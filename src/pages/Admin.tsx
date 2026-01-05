@@ -81,9 +81,9 @@ const statusOptions = [
   { value: "rejected", label: "Ditolak" },
 ];
 
-export default function Admin() {
+export default function admin() {
   const navigate = useNavigate();
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isadmin, setIsadmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("registrations");
   
@@ -120,10 +120,10 @@ export default function Admin() {
   });
 
   useEffect(() => {
-    checkAdminAccess();
+    checkadminAccess();
   }, []);
 
-  const checkAdminAccess = async () => {
+  const checkadminAccess = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
@@ -148,7 +148,7 @@ if (error || roleData?.role !== "admin") {
 console.log("USER:", user.id);
 console.log("ROLE:", roleData);
 
-      setIsAdmin(true);
+      setIsadmin(true);
       fetchAllData();
     } catch (error) {
       console.error("Error checking admin access:", error);
@@ -358,7 +358,7 @@ console.log("ROLE:", roleData);
     );
   }
 
-  if (!isAdmin) {
+  if (!isadmin) {
   return (
     <Layout>
       <div className="min-h-[60vh] flex items-center justify-center">
