@@ -19,6 +19,8 @@ import DocumentViewerDialog from "@/components/admin/DocumentViewerDialog";
 import RevisionDialog from "@/components/admin/RevisionDialog";
 import InterviewDialog from "@/components/admin/InterviewDialog";
 
+
+
 interface Document {
   name: string;
   path: string;
@@ -143,6 +145,8 @@ if (error || roleData?.role !== "admin") {
   return;
 }
 
+console.log("USER:", user.id);
+console.log("ROLE:", roleData);
 
       setIsAdmin(true);
       fetchAllData();
