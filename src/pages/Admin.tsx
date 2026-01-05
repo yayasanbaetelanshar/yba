@@ -355,8 +355,17 @@ export default function Admin() {
   }
 
   if (!isAdmin) {
-    return null;
-  }
+  return (
+    <Layout>
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <p className="text-muted-foreground">
+          Anda tidak memiliki akses admin
+        </p>
+      </div>
+    </Layout>
+  );
+}
+
 
   return (
     <Layout>
