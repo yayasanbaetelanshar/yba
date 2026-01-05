@@ -1,10 +1,25 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Eye, Download, ExternalLink, FileText, Image } from "lucide-react";
+import {
+  Eye,
+  Download,
+  ExternalLink,
+  FileText,
+  Image,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+/* =======================
+   TYPES
+======================= */
 interface Document {
   name: string;
   path: string;
@@ -12,25 +27,59 @@ interface Document {
 }
 
 interface DocumentViewerDialogProps {
-  documents: Document[];
+  documents: any; // ⬅️ PENTING: dari DB bisa object / array
   studentName: string;
 }
 
-export default function DocumentViewerDialog({ documents, studentName }: DocumentViewerDialogProps) {
+/* =======================
+   COMPONENT
+======================= */
+export default function DocumentViewerDialog({
+  documents,
+  studentName,
+}: DocumentViewerDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [previewType, setPreviewType] = useState<string | null>(null);
 
+  /* =======================
+     NORMALIZE DOCUMENTS
+     (INI KUNCI UTAMA)
+  ======================= */
+  const normalizedDocuments: Document[] = Array.isArray(documents)
+    ? documents
+    : documents && typeof documents === "object"
+    ? Object.entries(documents).map(([key, value]) => {
+        const path = String(value);
+        const lower = path.toLowerCase();
+
+        return {
+          name: key,
+          path,
+          type: lower.endsWith(".pdf")
+            ? "application/pdf"
+            : lower.endsWith(".png")
+            ? "image/png"
+            : lower.endsWith(".jpg") || lower.endsWith(".jpeg")
+            ? "image/jpeg"
+            : "application/octet-stream",
+        };
+      })
+    : [];
+
+  /* =======================
+     STORAGE HELPERS
+  ======================= */
   const getSignedUrl = async (path: string) => {
     try {
       const { data, error } = await supabase.storage
         .from("registration-documents")
-        .createSignedUrl(path, 3600); // 1 hour expiry
+        .createSignedUrl(path, 3600);
 
       if (error) throw error;
       return data.signedUrl;
     } catch (error) {
-      console.error("Error getting signed URL:", error);
+      console.error("Signed URL error:", error);
       toast.error("Gagal mengambil dokumen");
       return null;
     }
@@ -61,11 +110,14 @@ export default function DocumentViewerDialog({ documents, studentName }: Documen
   const documentLabels: Record<string, string> = {
     kk: "Kartu Keluarga",
     ktp: "KTP Orang Tua",
-    ijazah: "Ijazah/SKL",
+    ijazah: "Ijazah / SKL",
     foto: "Pas Foto 3x4",
     bukti_transfer: "Bukti Transfer",
   };
 
+  /* =======================
+     RENDER
+  ======================= */
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -74,21 +126,24 @@ export default function DocumentViewerDialog({ documents, studentName }: Documen
           Lihat Dokumen
         </Button>
       </DialogTrigger>
+
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="font-serif">Dokumen Pendaftaran - {studentName}</DialogTitle>
+          <DialogTitle className="font-serif">
+            Dokumen Pendaftaran – {studentName}
+          </DialogTitle>
         </DialogHeader>
-        
+
         <div className="mt-4">
-          {!documents || documents.length === 0 ? (
+          {normalizedDocuments.length === 0 ? (
             <p className="text-muted-foreground text-center py-8">
               Tidak ada dokumen yang diupload
             </p>
           ) : (
             <div className="space-y-6">
-              {/* Document List */}
+              {/* LIST DOKUMEN */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {documents.map((doc, index) => (
+                {normalizedDocuments.map((doc, index) => (
                   <div
                     key={index}
                     className="flex items-center justify-between p-4 bg-muted rounded-lg"
@@ -124,19 +179,24 @@ export default function DocumentViewerDialog({ documents, studentName }: Documen
                 ))}
               </div>
 
-              {/* Preview Area */}
+              {/* PREVIEW */}
               {previewUrl && (
                 <div className="border rounded-lg p-4">
                   <div className="flex justify-between items-center mb-4">
                     <h4 className="font-medium">Preview Dokumen</h4>
-                    <Button variant="outline" size="sm" onClick={() => setPreviewUrl(null)}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setPreviewUrl(null)}
+                    >
                       Tutup Preview
                     </Button>
                   </div>
+
                   {previewType?.startsWith("image/") ? (
                     <img
                       src={previewUrl}
-                      alt="Document preview"
+                      alt="Preview"
                       className="max-w-full h-auto rounded-lg mx-auto"
                     />
                   ) : previewType === "application/pdf" ? (
