@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Dialog,
   DialogContent,
@@ -7,19 +7,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import {
-  Eye,
-  Download,
-  ExternalLink,
-  FileText,
-  Image,
-} from "lucide-react";
+import { Eye, ExternalLink, FileText, Image, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-/* =======================
-   TYPES
-======================= */
 interface Document {
   name: string;
   path: string;
@@ -27,13 +18,10 @@ interface Document {
 }
 
 interface DocumentViewerDialogProps {
-  documents: any; // ⬅️ PENTING: dari DB bisa object / array
+  documents: any; // ⬅️ PENTING
   studentName: string;
 }
 
-/* =======================
-   COMPONENT
-======================= */
 export default function DocumentViewerDialog({
   documents,
   studentName,
@@ -42,34 +30,56 @@ export default function DocumentViewerDialog({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [previewType, setPreviewType] = useState<string | null>(null);
 
-  /* =======================
-     NORMALIZE DOCUMENTS
-     (INI KUNCI UTAMA)
-  ======================= */
-  const normalizedDocuments: Document[] = Array.isArray(documents)
-    ? documents
-    : documents && typeof documents === "object"
-    ? Object.entries(documents).map(([key, value]) => {
-        const path = String(value);
-        const lower = path.toLowerCase();
+  /**
+   * 🔑 NORMALISASI DOCUMENTS
+   * Support:
+   * - []
+   * - {}
+   * - { kk: "path" }
+   * - { kk: { path, type } }
+   */
+  const normalizedDocuments: Document[] = useMemo(() => {
+    if (!documents) return [];
 
-        return {
-          name: key,
-          path,
-          type: lower.endsWith(".pdf")
-            ? "application/pdf"
-            : lower.endsWith(".png")
-            ? "image/png"
-            : lower.endsWith(".jpg") || lower.endsWith(".jpeg")
-            ? "image/jpeg"
-            : "application/octet-stream",
-        };
-      })
-    : [];
+    // Sudah array
+    if (Array.isArray(documents)) {
+      return documents
+        .filter((d) => d && d.path)
+        .map((d) => ({
+          name: d.name ?? "Dokumen",
+          path: d.path,
+          type: d.type ?? "application/octet-stream",
+        }));
+    }
 
-  /* =======================
-     STORAGE HELPERS
-  ======================= */
+    // JSON object
+    if (typeof documents === "object") {
+      return Object.entries(documents).map(([key, value]: any) => {
+        if (typeof value === "string") {
+          return {
+            name: key,
+            path: value,
+            type: value.endsWith(".pdf")
+              ? "application/pdf"
+              : "image/jpeg",
+          };
+        }
+
+        if (typeof value === "object" && value?.path) {
+          return {
+            name: key,
+            path: value.path,
+            type: value.type ?? "application/octet-stream",
+          };
+        }
+
+        return null;
+      }).filter(Boolean) as Document[];
+    }
+
+    return [];
+  }, [documents]);
+
   const getSignedUrl = async (path: string) => {
     try {
       const { data, error } = await supabase.storage
@@ -78,8 +88,8 @@ export default function DocumentViewerDialog({
 
       if (error) throw error;
       return data.signedUrl;
-    } catch (error) {
-      console.error("Signed URL error:", error);
+    } catch (err) {
+      console.error(err);
       toast.error("Gagal mengambil dokumen");
       return null;
     }
@@ -95,29 +105,22 @@ export default function DocumentViewerDialog({
 
   const handleDownload = async (doc: Document) => {
     const url = await getSignedUrl(doc.path);
-    if (url) {
-      window.open(url, "_blank");
-    }
+    if (url) window.open(url, "_blank");
   };
 
-  const getDocumentIcon = (type: string) => {
-    if (type.startsWith("image/")) {
-      return <Image className="w-4 h-4" />;
-    }
-    return <FileText className="w-4 h-4" />;
-  };
+  const getIcon = (type: string) =>
+    type.startsWith("image/")
+      ? <Image className="w-4 h-4" />
+      : <FileText className="w-4 h-4" />;
 
   const documentLabels: Record<string, string> = {
     kk: "Kartu Keluarga",
     ktp: "KTP Orang Tua",
     ijazah: "Ijazah / SKL",
-    foto: "Pas Foto 3x4",
+    foto: "Pas Foto",
     bukti_transfer: "Bukti Transfer",
   };
 
-  /* =======================
-     RENDER
-  ======================= */
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -129,103 +132,74 @@ export default function DocumentViewerDialog({
 
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="font-serif">
+          <DialogTitle>
             Dokumen Pendaftaran – {studentName}
           </DialogTitle>
         </DialogHeader>
 
-        <div className="mt-4">
-          {normalizedDocuments.length === 0 ? (
-            <p className="text-muted-foreground text-center py-8">
-              Tidak ada dokumen yang diupload
-            </p>
-          ) : (
-            <div className="space-y-6">
-              {/* LIST DOKUMEN */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {normalizedDocuments.map((doc, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-4 bg-muted rounded-lg"
-                  >
-                    <div className="flex items-center gap-3">
-                      {getDocumentIcon(doc.type)}
-                      <div>
-                        <p className="font-medium text-foreground">
-                          {documentLabels[doc.name] || doc.name}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {doc.type}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handlePreview(doc)}
-                      >
-                        <Eye className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDownload(doc)}
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </Button>
+        {normalizedDocuments.length === 0 ? (
+          <p className="text-center text-muted-foreground py-8">
+            Tidak ada dokumen yang diupload
+          </p>
+        ) : (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {normalizedDocuments.map((doc, i) => (
+                <div
+                  key={i}
+                  className="flex items-center justify-between p-4 bg-muted rounded-lg"
+                >
+                  <div className="flex items-center gap-3">
+                    {getIcon(doc.type)}
+                    <div>
+                      <p className="font-medium">
+                        {documentLabels[doc.name] ?? doc.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {doc.type}
+                      </p>
                     </div>
                   </div>
-                ))}
-              </div>
 
-              {/* PREVIEW */}
-              {previewUrl && (
-                <div className="border rounded-lg p-4">
-                  <div className="flex justify-between items-center mb-4">
-                    <h4 className="font-medium">Preview Dokumen</h4>
+                  <div className="flex gap-2">
                     <Button
-                      variant="outline"
                       size="sm"
-                      onClick={() => setPreviewUrl(null)}
+                      variant="ghost"
+                      onClick={() => handlePreview(doc)}
                     >
-                      Tutup Preview
+                      <Eye className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleDownload(doc)}
+                    >
+                      <ExternalLink className="w-4 h-4" />
                     </Button>
                   </div>
-
-                  {previewType?.startsWith("image/") ? (
-                    <img
-                      src={previewUrl}
-                      alt="Preview"
-                      className="max-w-full h-auto rounded-lg mx-auto"
-                    />
-                  ) : previewType === "application/pdf" ? (
-                    <iframe
-                      src={previewUrl}
-                      className="w-full h-[500px] rounded-lg"
-                      title="PDF Preview"
-                    />
-                  ) : (
-                    <div className="text-center py-8">
-                      <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                      <p className="text-muted-foreground">
-                        Preview tidak tersedia untuk tipe file ini
-                      </p>
-                      <Button
-                        variant="outline"
-                        className="mt-4"
-                        onClick={() => window.open(previewUrl, "_blank")}
-                      >
-                        <Download className="w-4 h-4 mr-2" />
-                        Download File
-                      </Button>
-                    </div>
-                  )}
                 </div>
-              )}
+              ))}
             </div>
-          )}
-        </div>
+
+            {previewUrl && (
+              <div className="border rounded-lg p-4">
+                {previewType?.startsWith("image/") ? (
+                  <img src={previewUrl} className="mx-auto rounded" />
+                ) : previewType === "application/pdf" ? (
+                  <iframe
+                    src={previewUrl}
+                    className="w-full h-[500px]"
+                  />
+                ) : (
+                  <Button onClick={() => window.open(previewUrl, "_blank")}>
+                    <Download className="w-4 h-4 mr-2" />
+                    Download
+                  </Button>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
