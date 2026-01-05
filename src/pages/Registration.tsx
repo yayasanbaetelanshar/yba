@@ -144,48 +144,65 @@ export default function Registration() {
     return uploadedUrls;
   };
 
-  const handleSubmit = async (data: RegistrationForm) => {
-    // Validate all documents are uploaded
-    const missingDocs = documentTypes.filter(dt => dt.required && !documents[dt.key]);
-    if (missingDocs.length > 0) {
-      toast.error(`Dokumen belum lengkap: ${missingDocs.map(d => d.label).join(', ')}`);
-      return;
-    }
+const handleSubmit = async (data: RegistrationForm) => {
+  // cek dokumen wajib
+  const missingDocs = documentTypes.filter(
+    (dt) => dt.required && !documents[dt.key]
+  );
 
-    setIsLoading(true);
-    setUploadingDocs(true);
+  if (missingDocs.length > 0) {
+    toast.error(
+      `Dokumen belum lengkap: ${missingDocs.map((d) => d.label).join(", ")}`
+    );
+    return;
+  }
 
-    try {
-      // Upload documents first
-      const documentUrls = await uploadDocuments(data.parentEmail);
-      setUploadingDocs(false);
+  setIsLoading(true);
+  setUploadingDocs(true);
 
-      // Then register the student
-      const { data: response, error } = await supabase.functions.invoke('register-student', {
+  try {
+    // 1️⃣ Upload dokumen ke storage
+    const documentUrls = await uploadDocuments(data.parentEmail);
+    setUploadingDocs(false);
+
+    // 2️⃣ PANGGIL EDGE FUNCTION (INI INTINYA)
+    const { data: response, error } =
+      await supabase.functions.invoke("register-student", {
+        method: "POST", // 🔥 WAJIB
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: {
           ...data,
-          documents: documentUrls
-        }
+          documents: documentUrls,
+        },
       });
 
-      if (error) throw error;
-      
-      if (!response.success) {
-        throw new Error(response.message);
-      }
-
-      setCredentials(response.credentials);
-      setIsNewUser(response.isNewUser);
-      setIsSuccess(true);
-      toast.success(response.message);
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "Terjadi kesalahan";
-      toast.error(errorMessage);
-    } finally {
-      setIsLoading(false);
-      setUploadingDocs(false);
+    if (error) {
+      console.error("Edge Function error:", error);
+      throw error;
     }
-  };
+
+    if (!response?.success) {
+      throw new Error(response?.message || "Pendaftaran gagal");
+    }
+
+    // 3️⃣ sukses
+    setCredentials(response.credentials ?? null);
+    setIsNewUser(response.isNewUser);
+    setIsSuccess(true);
+    toast.success(response.message);
+  } catch (err: unknown) {
+    console.error("Submit error:", err);
+    const msg =
+      err instanceof Error ? err.message : "Terjadi kesalahan saat mendaftar";
+    toast.error(msg);
+  } finally {
+    setIsLoading(false);
+    setUploadingDocs(false);
+  }
+};
+
 
   const nextStep = async () => {
     let fieldsToValidate: (keyof RegistrationForm)[] = [];
