@@ -177,7 +177,7 @@ export default function Login() {
 const handleGoogleLogin = async () => {
   setIsLoading(true);
   try {
-    const redirectUrl = window.location.origin;  // atau langsung `${window.location.origin}/`
+    const redirectUrl = `${window.location.origin}/dashboard`;
     
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
