@@ -131,18 +131,18 @@ export default function Admin() {
         return;
       }
 
-      const { data: roleData } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", user.id)
-        .eq("role", "admin")
-        .single();
+const { data: roleData, error } = await supabase
+  .from("user_roles")
+  .select("role")
+  .eq("user_id", user.id)
+  .maybeSingle();
 
-      if (!roleData) {
-        toast.error("Akses ditolak. Anda bukan admin.");
-        navigate("/dashboard");
-        return;
-      }
+if (error || roleData?.role !== "admin") {
+  toast.error("Akses ditolak. Anda bukan admin.");
+  navigate("/dashboard");
+  return;
+}
+
 
       setIsAdmin(true);
       fetchAllData();
