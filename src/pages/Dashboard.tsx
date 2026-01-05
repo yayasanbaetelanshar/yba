@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, BookOpen, Award, LogOut, GraduationCap, Clock, CheckCircle, AlertCircle, KeyRound } from "lucide-react";
+import { User, BookOpen, Award, LogOut, GraduationCap, Clock, CheckCircle, AlertCircle, KeyRound, Video, ExternalLink, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -18,10 +18,28 @@ interface Student {
 
 interface Registration {
   id: string;
-  status: string;
-  created_at: string;
+  student_id: string;
   institution_id: string;
+  status: "pending" | "document_review" | "interview" | "accepted" | "rejected";
+  notes: string | null;
+
+  // TAMBAHAN — OPTIONAL
+  revision_notes?: string | null;
+  interview_date?: string | null;
+  interview_link?: string | null;
+  interview_notes?: string | null;
+
+  documents?: any;
+  created_at: string;
+  updated_at?: string;
+
+  students?: {
+    id: string;
+    full_name: string;
+    gender?: string;
+  };
 }
+
 
 interface HafalanProgress {
   id: string;
@@ -304,17 +322,77 @@ export default function Dashboard() {
                           {registrations.map((reg) => (
                             <div
                               key={reg.id}
-                              className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-4 bg-muted rounded-xl"
+                              className="p-4 bg-muted rounded-xl space-y-4"
                             >
-                              <div>
-                                <p className="font-semibold text-foreground">
-                                  Pendaftaran #{reg.id.slice(0, 8)}
-                                </p>
-                                <p className="text-sm text-muted-foreground">
-                                  Didaftarkan: {new Date(reg.created_at).toLocaleDateString("id-ID")}
-                                </p>
+                              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                <div>
+                                  <p className="font-semibold text-foreground">
+                                    Pendaftaran #{reg.id.slice(0, 8)}
+                                  </p>
+                                  <p className="text-sm text-muted-foreground">
+                                    Didaftarkan: {new Date(reg.created_at).toLocaleDateString("id-ID")}
+                                  </p>
+                                </div>
+                                {getStatusBadge(reg.status)}
                               </div>
-                              {getStatusBadge(reg.status)}
+
+                              {/* Revision Notes Alert */}
+                              {reg.revision_notes && (
+                                <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                                  <div className="flex items-start gap-3">
+                                    <AlertCircle className="w-5 h-5 text-orange-500 mt-0.5" />
+                                    <div>
+                                      <h4 className="font-medium text-orange-800">Catatan Revisi dari Admin</h4>
+                                      <p className="text-sm text-orange-700 mt-1 whitespace-pre-line">
+                                        {reg.revision_notes}
+                                      </p>
+                                      <p className="text-xs text-orange-600 mt-2">
+                                        Mohon perbaiki dokumen dan upload ulang di halaman pendaftaran
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Interview Invitation */}
+                              {reg.status === "interview" && reg.interview_date && reg.interview_link && (
+                                <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                                  <div className="flex items-start gap-3">
+                                    <Video className="w-5 h-5 text-purple-500 mt-0.5" />
+                                    <div className="flex-1">
+                                      <h4 className="font-medium text-purple-800">Undangan Wawancara Online</h4>
+                                      <div className="mt-3 space-y-2">
+                                        <div className="flex items-center gap-2 text-sm text-purple-700">
+                                          <Calendar className="w-4 h-4" />
+                                          <span className="font-medium">Jadwal:</span>
+                                          {new Date(reg.interview_date).toLocaleString("id-ID", {
+                                            weekday: 'long',
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                            hour: '2-digit',
+                                            minute: '2-digit'
+                                          })}
+                                        </div>
+                                        <a 
+                                          href={reg.interview_link}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="inline-flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+                                        >
+                                          <ExternalLink className="w-4 h-4" />
+                                          Gabung Meeting
+                                        </a>
+                                        {reg.interview_notes && (
+                                          <p className="text-sm text-purple-700 mt-2">
+                                            <span className="font-medium">Catatan:</span> {reg.interview_notes}
+                                          </p>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
                             </div>
                           ))}
                         </div>

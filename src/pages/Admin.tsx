@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
   Users, BookOpen, Award, FileText, LogOut, 
-  CheckCircle, XCircle, Clock, Eye, Edit, Plus, Search, Filter
+  CheckCircle, XCircle, Clock, Plus, Search, Filter
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import Layout from "@/components/layout/Layout";
+import DocumentViewerDialog from "@/components/admin/DocumentViewerDialog";
+import RevisionDialog from "@/components/admin/RevisionDialog";
+import InterviewDialog from "@/components/admin/InterviewDialog";
+
+interface Document {
+  name: string;
+  path: string;
+  type: string;
+}
 
 interface Student {
   id: string;
@@ -32,6 +41,11 @@ interface Registration {
   status: "pending" | "document_review" | "interview" | "accepted" | "rejected";
   created_at: string;
   notes: string | null;
+  documents: Document[] | null;
+  revision_notes: string | null;
+  interview_date: string | null;
+  interview_link: string | null;
+  interview_notes: string | null;
   students?: { id: string; full_name: string; gender?: string };
 }
 
@@ -161,11 +175,21 @@ export default function Admin() {
     const { data } = await supabase
       .from("registrations")
       .select(`
-        *,
+        id,
+        student_id,
+        institution_id,
+        status,
+        created_at,
+        notes,
+        documents,
+        revision_notes,
+        interview_date,
+        interview_link,
+        interview_notes,
         students (id, full_name, gender)
       `)
       .order("created_at", { ascending: false });
-    setRegistrations(data || []);
+    setRegistrations((data as unknown as Registration[]) || []);
   };
 
   const fetchHafalan = async () => {
@@ -482,7 +506,8 @@ export default function Admin() {
                             <th className="text-left py-3 px-4 text-sm font-semibold">Nama Santri</th>
                             <th className="text-left py-3 px-4 text-sm font-semibold">Tanggal Daftar</th>
                             <th className="text-left py-3 px-4 text-sm font-semibold">Status</th>
-                            <th className="text-left py-3 px-4 text-sm font-semibold">Aksi</th>
+                            <th className="text-left py-3 px-4 text-sm font-semibold">Dokumen & Aksi</th>
+                            <th className="text-left py-3 px-4 text-sm font-semibold">Ubah Status</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -498,6 +523,36 @@ export default function Admin() {
                               </td>
                               <td className="py-3 px-4">
                                 {getStatusBadge(reg.status)}
+                                {reg.revision_notes && (
+                                  <p className="text-xs text-orange-600 mt-1">Ada catatan revisi</p>
+                                )}
+                                {reg.interview_date && (
+                                  <p className="text-xs text-purple-600 mt-1">
+                                    Wawancara: {new Date(reg.interview_date).toLocaleString("id-ID")}
+                                  </p>
+                                )}
+                              </td>
+                              <td className="py-3 px-4">
+                                <div className="flex flex-wrap gap-2">
+                                  <DocumentViewerDialog 
+                                    documents={reg.documents || []} 
+                                    studentName={reg.students?.full_name || "N/A"} 
+                                  />
+                                  <RevisionDialog 
+                                    registrationId={reg.id} 
+                                    studentName={reg.students?.full_name || "N/A"} 
+                                    currentNotes={reg.revision_notes}
+                                    onUpdate={fetchRegistrations}
+                                  />
+                                  <InterviewDialog 
+                                    registrationId={reg.id} 
+                                    studentName={reg.students?.full_name || "N/A"} 
+                                    currentDate={reg.interview_date}
+                                    currentLink={reg.interview_link}
+                                    currentNotes={reg.interview_notes}
+                                    onUpdate={fetchRegistrations}
+                                  />
+                                </div>
                               </td>
                               <td className="py-3 px-4">
                                 <Select
