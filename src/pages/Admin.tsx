@@ -137,13 +137,21 @@ const { data: roleData, error } = await supabase
   .from("user_roles")
   .select("role")
   .eq("user_id", user.id)
-  .maybeSingle();
+  .eq("role", "admin");
 
-if (error || roleData?.role !== "admin") {
+if (error) {
+  console.error(error);
+  toast.error("Gagal cek role admin");
+  navigate("/login");
+  return;
+}
+
+if (!roleData || roleData.length === 0) {
   toast.error("Akses ditolak. Anda bukan admin.");
   navigate("/dashboard");
   return;
 }
+
 
 console.log("USER:", user.id);
 console.log("ROLE:", roleData);
