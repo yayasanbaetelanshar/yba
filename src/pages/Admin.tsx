@@ -556,9 +556,10 @@ console.log("ROLE:", roleData);
                               <td className="py-3 px-4">
                                 <div className="flex flex-wrap gap-2">
                                   <DocumentViewerDialog 
-                                    documents={reg.documents || []} 
-                                    studentName={reg.students?.full_name || "N/A"} 
-                                  />
+  documents={Array.isArray(reg.documents) ? reg.documents : []}
+  studentName={reg.students?.full_name || "N/A"} 
+/>
+
                                   <RevisionDialog 
                                     registrationId={reg.id} 
                                     studentName={reg.students?.full_name || "N/A"} 
