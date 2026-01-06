@@ -347,7 +347,7 @@ export default function Dashboard() {
                                         {reg.revision_notes}
                                       </p>
                                       <p className="text-xs text-orange-600 mt-2">
-                                        Mohon perbaiki dokumen dan upload ulang di halaman pendaftaran
+                                        Mohon perbaiki dokumen dan dan kirim ke nomor 085975213222
                                       </p>
                                     </div>
                                   </div>
