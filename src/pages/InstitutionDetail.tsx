@@ -337,7 +337,7 @@ export default function InstitutionDetail() {
 
             {/* Kurikulum */}
             <div>
-              <h2 className="text-2xl font-bold mb-4">Kurikulum</h2>
+              <h2 className="text-2xl font-bold mb-4">Program Unggulan</h2>
               <div className="grid md:grid-cols-2 gap-3">
                 {institution.curriculum.map((c) => (
                   <div
