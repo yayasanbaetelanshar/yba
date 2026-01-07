@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { MapPin, Phone, Mail, Facebook, Instagram, Youtube } from "lucide-react";
+import { MapPin, Phone, Mail, Facebook, Instagram, Youtube, Music2 } from "lucide-react";
 import LogoYayasan from "@/assets/logo yayasan.png"; // ← Logo yayasan ditambahkan di sini
 
 const quickLinks = [
@@ -45,25 +45,32 @@ export default function Footer() {
               </p>
               <div className="flex gap-3">
                 <a
-                  href="#"
+                  href="https://web.facebook.com/yayasanbaetelanshar"
                   className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-primary-foreground/20 transition-colors"
                   aria-label="Facebook"
                 >
                   <Facebook className="w-5 h-5" />
                 </a>
                 <a
-                  href="#"
+                  href="https://www.instagram.com/baetelanshar_media/"
                   className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-primary-foreground/20 transition-colors"
                   aria-label="Instagram"
                 >
                   <Instagram className="w-5 h-5" />
                 </a>
                 <a
-                  href="#"
+                  href="https://www.youtube.com/@BaetElAnshar"
                   className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-primary-foreground/20 transition-colors"
                   aria-label="Youtube"
                 >
                   <Youtube className="w-5 h-5" />
+                </a>
+                  <a
+                  href="https://www.tiktok.com/@baetelanshor"
+                  className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-primary-foreground/20 transition-colors"
+                  aria-label="Youtube"
+                >
+                  <Music2 className="w-5 h-5" />
                 </a>
               </div>
             </div>
