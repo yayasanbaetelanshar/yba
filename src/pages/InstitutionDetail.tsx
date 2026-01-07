@@ -18,7 +18,7 @@ import sekretarisImg from "@/assets/organisasi/icon orang.webp";
 import bendaharaImg from "@/assets/organisasi/icon orang.webp";
 
 // SMP
-import kepalaSmpImg from "@/assets/organisasi/icon orang.webp";
+import kepalaSmpImg from "@/assets/organisasi/ks smp.webp";
 import gmpsmp1 from "@/assets/organisasi/icon orang.webp";
 import gmpsmp2 from "@/assets/organisasi/icon orang.webp";
 import gmpsmp3 from "@/assets/organisasi/icon orang.webp";
@@ -32,7 +32,7 @@ import gmpsmp10 from "@/assets/organisasi/icon orang.webp";
 import gmpsmp11 from "@/assets/organisasi/icon orang.webp";
 
 // SMA
-import kepalaSmaImg from "@/assets/organisasi/icon orang.webp";
+import kepalaSmaImg from "@/assets/organisasi/ks sma.webp";
 import gmp1 from "@/assets/organisasi/icon orang.webp";
 import gmp2 from "@/assets/organisasi/icon orang.webp";
 import gmp3 from "@/assets/organisasi/icon orang.webp";
@@ -121,7 +121,7 @@ const institutionData: Record<string, Institution> = {
   },
 
   smp: {
-    name: "SMP Arrasyd",
+    name: "SMP Baet El Anshar",
     fullName: "Sekolah Menengah Pertama Arrasyd",
     level: "Tingkat Menengah Pertama",
     vision:
@@ -132,11 +132,11 @@ const institutionData: Record<string, Institution> = {
       "Mengembangkan potensi akademik dan non-akademik siswa",
     ],
     history:
-      "SMP Arrasyd didirikan untuk melanjutkan pendidikan formal berbasis Islam setelah DTA.",
+      "SMP Baet El Anshar didirikan untuk melanjutkan pendidikan formal berbasis Islam setelah DTA.",
     organization: [
       { role: "Ketua Yayasan", name: "KH. Harun Arasyd", photo: fotoketuayayasan },
       { role: "Kepala Sekolah", name: "Ilham Syauqi Harun, S.Kom", photo: kepalaSmpImg },
-      { role: "Guru Mapel BTQ", name: "Ade Tuti", photo: gmpsmp1 },
+      { role: "Guru Mapel BTQ", name: "Ade Tuti", photo: kepalaDtaImg },
       { role: "Guru Mapel PJOK", name: "Indra Lesmana, S.Pd", photo: gmpsmp2 },
       { role: "Guru Mapel B. Inggris", name: "Aulia Rahman Suganda, S.Pd", photo: kepalaSmaImg },
       { role: "Guru Mapel SBK", name: "Erviani Ramdani", photo: gmpsmp3 },
@@ -153,13 +153,12 @@ const institutionData: Record<string, Institution> = {
     description:
       "SMP Arrasyd merupakan sekolah menengah pertama berbasis Islam terpadu.",
     curriculum: [
-      "Matematika",
-      "IPA",
-      "IPS",
-      "Bahasa Indonesia",
-      "Bahasa Inggris",
-      "PAI",
-      "Tahfidz",
+      "Pembiasaan Sholat dhuha",
+      "Pemisaan sholat  dzuhur berjmaah",
+      "kelas tahfidz",
+      "English Club",
+      "arabic Club",
+      "Pencak silat",
       "Informatika",
     ],
     facilities: [
@@ -169,12 +168,12 @@ const institutionData: Record<string, Institution> = {
       "Musholla",
       "Lapangan olahraga",
     ],
-    schedule: "Senin - Jumat, 07.00 - 14.00 WIB",
-    fees: { registration: 150000, monthly: 100000, annual: 600000 },
+    schedule: "Senin - Sabtu, 07.00 - 13.00 WIB",
+    fees: { registration: 50000, monthly: 200000, annual: 500000 },
   },
 
   sma: {
-    name: "SMA Arrasyd",
+    name: "SMA Baet El Anshar",
     fullName: "Sekolah Menengah Atas Arrasyd",
     level: "Tingkat Menengah Atas",
     vision:
@@ -190,9 +189,10 @@ const institutionData: Record<string, Institution> = {
       { role: "Ketua Yayasan", name: "KH. Harun Arrasyd", photo: fotoketuayayasan },
       { role: "Kepala Sekolah", name: "Aulia Rahman Suganda, S.Pd", photo: kepalaSmaImg },
       { role: "Guru Mapel PAI", name: "Abdulrahman", photo: gmp1 },
+      {role: "Guru Mapel Bahasa Indonesia", name : "Hari Saputra", photo: gmpsmp5},
     ],
     description:
-      "SMA Arrasyd berfokus pada prestasi akademik, karakter Islami, dan kesiapan masa depan.",
+      "SMA Baet El Anshar berfokus pada prestasi akademik, karakter Islami, dan kesiapan masa depan.",
     curriculum: [
       "Matematika",
       "Fisika",

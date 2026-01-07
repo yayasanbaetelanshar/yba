@@ -6,10 +6,10 @@ import fotoketua from "@/assets/foto abah.png"
 const milestones = [
   { year: "2018", event: "Pendirian Yayasan Baet El Anshar" },
   { year: "2019", event: "Pembukaan Pondok Pesantren Baet El Anshar" },
-  { year: "2020", event: "Pembukaan SMP Baet El Anshar" },
-  { year: "2023", event: "Perolehan Izin SMP Baet El Anshar" },
-  { year: "2024", event: "Pembukaan SMA Baet El Anshar dan DTA Arrasyd" },
-  { year: "2025", event: "Meluluskan 500+ Hafidz Al-Quran" },
+  { year: "2020", event: "Pembukaan DTA Arrasyd" },
+  { year: "2021", event: "Pemukaan SMP Baet El Anshar" },
+  { year: "2023", event: "Perolehan izin SMP Baet El Anshar dan DTA Arrasyd" },
+  { year: "2024", event: "Pembukaan SMA Baet El Anshar" },
 ];
 
 const achievements = [
