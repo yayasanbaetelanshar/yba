@@ -18,8 +18,6 @@ import Layout from "@/components/layout/Layout";
 import DocumentViewerDialog from "@/components/admin/DocumentViewerDialog";
 import RevisionDialog from "@/components/admin/RevisionDialog";
 import InterviewDialog from "@/components/admin/InterviewDialog";
-import * as XLSX from "xlsx";
-
 
 
 
@@ -83,14 +81,6 @@ const statusOptions = [
   { value: "rejected", label: "Ditolak" },
 ];
 
-const getGradeFromScore = (score: number): string => {
-  if (score >= 90) return "A";
-  if (score >= 80) return "B";
-  if (score >= 70) return "C";
-  if (score >= 60) return "D";
-  return "E";
-};
-
 export default function admin() {
   const navigate = useNavigate();
   const [isadmin, setIsadmin] = useState(false);
@@ -128,94 +118,6 @@ export default function admin() {
     score: 0,
     grade: "",
   });
-
-  //import excel
-  const importAcademicExcel = async (
-  e: React.ChangeEvent<HTMLInputElement>
-) => {
-  const file = e.target.files?.[0];
-  if (!file) return;
-
-  try {
-    const buffer = await file.arrayBuffer();
-    const workbook = XLSX.read(buffer, { type: "array" });
-
-    const sheetName = workbook.SheetNames[0];
-    const sheet = workbook.Sheets[sheetName];
-
-    const rows: any[] = XLSX.utils.sheet_to_json(sheet, {
-      defval: "",
-    });
-
-    if (rows.length === 0) {
-      toast.error("File Excel kosong");
-      return;
-    }
-
-    const requiredColumns = [
-      "student_name",
-      "subject",
-      "semester",
-      "academic_year",
-      "score",
-    ];
-
-    for (const col of requiredColumns) {
-      if (!(col in rows[0])) {
-        toast.error(`Kolom ${col} tidak ditemukan`);
-        return;
-      }
-    }
-
-    const inserts: any[] = [];
-
-    for (const row of rows) {
-      const studentName = row.student_name?.toString().trim();
-      const score = Number(row.score);
-
-      if (!studentName || isNaN(score)) continue;
-
-      const student = students.find(
-        (s) =>
-          s.full_name.toLowerCase() === studentName.toLowerCase()
-      );
-
-      if (!student) {
-        console.warn("Santri tidak ditemukan:", studentName);
-        continue;
-      }
-
-      inserts.push({
-        student_id: student.id,
-        subject: row.subject.toString(),
-        semester: Number(row.semester),
-        academic_year: row.academic_year.toString(),
-        score,
-        grade: getGradeFromScore(score),
-      });
-    }
-
-    if (inserts.length === 0) {
-      toast.error("Tidak ada data valid untuk diimport");
-      return;
-    }
-
-    const { error } = await supabase
-      .from("academic_records")
-      .insert(inserts);
-
-    if (error) throw error;
-
-    toast.success(`Berhasil import ${inserts.length} nilai`);
-    fetchAcademics();
-  } catch (err) {
-    console.error(err);
-    toast.error("Gagal import file Excel");
-  } finally {
-    e.target.value = "";
-  }
-};
-
 
   useEffect(() => {
     checkadminAccess();
@@ -699,33 +601,6 @@ console.log("ROLE:", roleData);
                 </CardContent>
               </Card>
             </TabsContent>
-<div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-  <CardTitle className="font-serif">Nilai Akademik Santri</CardTitle>
-
-  <div className="flex gap-2">
-    <label className="cursor-pointer">
-      <Input
-        type="file"
-        accept=".xlsx"
-        className="hidden"
-        onChange={importAcademicExcel}
-      />
-      <Button variant="outline">
-        Import Excel
-      </Button>
-    </label>
-
-    <Dialog open={isAcademicModalOpen} onOpenChange={setIsAcademicModalOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <Plus className="w-4 h-4 mr-2" />
-          Tambah Nilai
-        </Button>
-      </DialogTrigger>
-      {/* modal isi lama */}
-    </Dialog>
-  </div>
-</div>
 
             {/* Hafalan Tab */}
             <TabsContent value="hafalan">
