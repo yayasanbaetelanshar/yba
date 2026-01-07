@@ -19,33 +19,20 @@ import bendaharaImg from "@/assets/organisasi/icon orang.webp";
 
 // SMP
 import kepalaSmpImg from "@/assets/organisasi/ks smp.webp";
-import gmpsmp1 from "@/assets/organisasi/icon orang.webp";
-import gmpsmp2 from "@/assets/organisasi/icon orang.webp";
-import gmpsmp3 from "@/assets/organisasi/icon orang.webp";
-import gmpsmp4 from "@/assets/organisasi/icon orang.webp";
+import gmpsmp2 from "@/assets/organisasi/gmpindra.webp";
+import gmpsmp3 from "@/assets/organisasi/gmpervi.webp";
+import gmpsmp4 from "@/assets/organisasi/gmpfudja.webp";
 import gmpsmp5 from "@/assets/organisasi/icon orang.webp";
-import gmpsmp6 from "@/assets/organisasi/icon orang.webp";
+import gmpsmp6 from "@/assets/organisasi/gmpaldi.webp";
 import gmpsmp7 from "@/assets/organisasi/icon orang.webp";
 import gmpsmp8 from "@/assets/organisasi/icon orang.webp";
 import gmpsmp9 from "@/assets/organisasi/icon orang.webp";
-import gmpsmp10 from "@/assets/organisasi/icon orang.webp";
+import gmpsmp10 from "@/assets/organisasi/foto arul.webp";
 import gmpsmp11 from "@/assets/organisasi/icon orang.webp";
 
 // SMA
 import kepalaSmaImg from "@/assets/organisasi/ks sma.webp";
 import gmp1 from "@/assets/organisasi/icon orang.webp";
-import gmp2 from "@/assets/organisasi/icon orang.webp";
-import gmp3 from "@/assets/organisasi/icon orang.webp";
-import gmp4 from "@/assets/organisasi/icon orang.webp";
-import gmp5 from "@/assets/organisasi/icon orang.webp";
-import gmp6 from "@/assets/organisasi/icon orang.webp";
-import gmp7 from "@/assets/organisasi/icon orang.webp";
-import gmp8 from "@/assets/organisasi/icon orang.webp";
-import gmp9 from "@/assets/organisasi/icon orang.webp";
-import gmp10 from "@/assets/organisasi/icon orang.webp";
-import gmp11 from "@/assets/organisasi/icon orang.webp";
-import gmp12 from "@/assets/organisasi/icon orang.webp";
-
 /* ==================================================
    TYPE
 ================================================== */
@@ -95,8 +82,8 @@ const institutionData: Record<string, Institution> = {
     organization: [
       { role: "Ketua Yayasan", name: "KH. Harun Arrasyd", photo: fotoketuayayasan },
       { role: "Kepala DTA", name: "Ustz. Ade Tuti", photo: kepalaDtaImg },
-      { role: "Sekretaris", name: "Ustz. Erviani Ramdani", photo: sekretarisImg },
-      { role: "Bendahara", name: "Ustz. Erna", photo: bendaharaImg },
+      { role: "Guru Kelas 1", name: "Ustz. Erviani Ramdani", photo: sekretarisImg },
+      { role: "Guru Kelas 2", name: "Ustz. Erna", photo: bendaharaImg },
     ],
     description:
       "DTA Arrasyd merupakan lembaga pendidikan agama Islam tingkat dasar.",
@@ -188,30 +175,39 @@ const institutionData: Record<string, Institution> = {
     organization: [
       { role: "Ketua Yayasan", name: "KH. Harun Arrasyd", photo: fotoketuayayasan },
       { role: "Kepala Sekolah", name: "Aulia Rahman Suganda, S.Pd", photo: kepalaSmaImg },
-      { role: "Guru Mapel PAI", name: "Abdulrahman", photo: gmp1 },
+      { role: "Guru Mapel PAI", name: "Ujang Abdurahman,S.Pd.I", photo: gmpsmp8 },
       {role: "Guru Mapel Bahasa Indonesia", name : "Hari Saputra", photo: gmpsmp5},
+      {role: "Guru Mapel Bahasa Inggris", name : "Erna", photo: bendaharaImg},
+      {role: "Guru Mapel PPKn", name : "Fudza Maula Hudjadillah, S.Sos", photo: gmpsmp4},
+      {role: "Guru Mapel Seni Musik", name : "Reinaldi Aprian, S.Pd", photo: gmpsmp6},
+      {role: "Guru Mapel Matematika", name : "Nurul Zaman, S.Pd", photo: gmpsmp10},
+      {role: "Guru Mapel IPAS dan IPS", name : "Muslih Solihin, S.E", photo: gmp1},
+      {role: "Guru Mapel Pjok", name : "Ilham Syauqi Harun, S.Kom", photo: kepalaSmpImg},
+      {role: "Guru Mapel Informatika", name: "Aulia Rahman Suganda, S.Pd", photo: kepalaSmaImg},
+      {role: "Guru MApel Bahasa Sunda", name: "Maryana", photo: gmpsmp9},
     ],
     description:
       "SMA Baet El Anshar berfokus pada prestasi akademik, karakter Islami, dan kesiapan masa depan.",
     curriculum: [
-      "Matematika",
-      "Fisika",
-      "Kimia",
-      "Biologi",
-      "Ekonomi",
-      "Geografi",
-      "PAI",
+      "Pembiasaan Sholat Dhuha",
+      "Pembiasaan Sholat Dzuhur Berjamaah",
+      "Kelas Multimedia",
+      "Kelas Pertanian dan Peternakan",
+      "Kelas Tahfidz",
+      "English Club",
+      "Arabic Club",
+      "Pencak Silat",
       "Tahfidz",
       "Informatika",
     ],
     facilities: [
       "Laboratorium lengkap",
-      "Ruang kelas AC",
+      "Ruang kelas nyaman",
       "Perpustakaan digital",
       "Aula",
       "Lapangan olahraga",
     ],
-    schedule: "Senin - Jumat, 07.00 - 15.00 WIB",
+    schedule: "Senin - Sabtu, 07.00 - 14.00 WIB",
     fees: { registration: 200000, monthly: 150000, annual: 800000 },
   },
 };
