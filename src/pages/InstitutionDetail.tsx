@@ -138,7 +138,7 @@ const institutionData: Record<string, Institution> = {
 
     ],
     description:
-      "SMP Arrasyd merupakan sekolah menengah pertama berbasis Islam terpadu.",
+      "SMP Baet El Anshar merupakan sekolah menengah pertama berbasis Islam terpadu.",
     curriculum: [
       "Pembiasaan Sholat dhuha",
       "Pemisaan sholat  dzuhur berjmaah",
@@ -161,7 +161,7 @@ const institutionData: Record<string, Institution> = {
 
   sma: {
     name: "SMA Baet El Anshar",
-    fullName: "Sekolah Menengah Atas Arrasyd",
+    fullName: "Sekolah Menengah Atas Anshar",
     level: "Tingkat Menengah Atas",
     vision:
       "Mencetak lulusan berakhlak, berprestasi, dan siap melanjutkan pendidikan ke jenjang tinggi.",
@@ -171,7 +171,7 @@ const institutionData: Record<string, Institution> = {
       "Mempersiapkan siswa menghadapi perguruan tinggi dan dunia kerja",
     ],
     history:
-      "SMA Arrasyd didirikan sebagai jenjang lanjutan untuk mencetak generasi unggul.",
+      "SMA Baet El Anshar didirikan sebagai jenjang lanjutan untuk mencetak generasi unggul.",
     organization: [
       { role: "Ketua Yayasan", name: "KH. Harun Arrasyd", photo: fotoketuayayasan },
       { role: "Kepala Sekolah", name: "Aulia Rahman Suganda, S.Pd", photo: kepalaSmaImg },
@@ -210,7 +210,50 @@ const institutionData: Record<string, Institution> = {
     schedule: "Senin - Sabtu, 07.00 - 14.00 WIB",
     fees: { registration: 200000, monthly: 150000, annual: 800000 },
   },
+  pesantren: {
+    name: "PPTQN Baet El Anshar",
+    fullName: "Pondok Pesantren Tahfidz Qur'an Baet El Anshar",
+    level: "Tingkat Menengah Atas",
+    vision:
+      "Mencetak lulusan berakhlak, berprestasi, dan siap melanjutkan pendidikan ke jenjang tinggi.",
+    mission: [
+      "Meningkatkan kualitas akademik siswa",
+      "Membentuk karakter Islami dan kepemimpinan",
+      "Mempersiapkan siswa menghadapi perguruan tinggi dan dunia kerja",
+    ],
+    history:
+      "Pondok pesantren tahfidz qur'an Baet El Anshar didirikan sebagai wadah mencetak generasi yang mencintai Al qu'an.",
+    organization: [
+      {role: "Pengasuh", name: "KH. Harun Arrasyd", photo: fotoketuayayasan },
+     
+    ],
+    description:
+      "Pondok pesantren tahfidz qur'an Baet El Anshar berfokus pada generasi penghafal Al Qur'an.",
+    curriculum: [
+      "Pembiasaan Sholat Dhuha",
+      "Pembiasaan Sholat Dzuhur Berjamaah",
+      "Kelas Multimedia",
+      "Kelas Pertanian dan Peternakan",
+      "Kelas Tahfidz",
+      "English Club",
+      "Arabic Club",
+      "Pencak Silat",
+      "Tahfidz",
+      "Informatika",
+    ],
+    facilities: [
+      "Laboratorium lengkap",
+      "Ruang kelas nyaman",
+      "Perpustakaan digital",
+      "Aula",
+      "Lapangan olahraga",
+    ],
+    schedule: "Mukim 24/7",
+    fees: { registration: 200000, monthly: 150000, annual: 800000 },
+  },
+
 };
+
 
 /* ==================================================
    HELPER

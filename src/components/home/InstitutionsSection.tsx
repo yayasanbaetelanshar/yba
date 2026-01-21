@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, BookOpen, GraduationCap, School, BookMarked } from "lucide-react";
+import {logoDTA} from "@/assets/logo dta.png";
 import { Button } from "@/components/ui/button";
 
 const institutions = [
@@ -7,7 +7,7 @@ const institutions = [
     id: "dta",
     name: "DTA Arrasyd",
     description: "Pendidikan agama Islam tingkat dasar dengan fokus pada pembentukan karakter Islami dan Al-Quran.",
-    icon: BookOpen,
+    logo: logoDTA,
     level: "Tingkat Dasar",
     color: "bg-emerald-100 text-emerald-700",
     iconBg: "bg-emerald-500",
@@ -39,6 +39,7 @@ const institutions = [
     color: "bg-gold-100 text-gold-600",
     iconBg: "bg-gold-500",
   },
+
 ];
 
 export default function InstitutionsSection() {
@@ -48,14 +49,13 @@ export default function InstitutionsSection() {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-block text-secondary font-semibold text-sm uppercase tracking-wider mb-4">
-            Lembaga Pendidikan
+            Lembaga Pendidikan, Pemberdayaan Masyarakat dan Usaha
           </span>
           <h2 className="section-heading">
-            Empat Pilar Pendidikan <span className="text-primary">Baet El Anshar</span>
+            Lembaga naugan yayasan Baet El Anshar <span className="text-primary">Baet El Anshar</span>
           </h2>
           <p className="section-subheading mt-4">
-            Pilih jenjang pendidikan yang sesuai untuk putra-putri Anda, dari tingkat dasar 
-            hingga program tahfidz intensif.
+            Lembaga naungan kami berkomitmen untuk terus menjadi  garda terdepan kebutuhan masyarakat dari mulai bidang pendidikan hingga bidang Usaha.
           </p>
         </div>
 
@@ -104,7 +104,7 @@ export default function InstitutionsSection() {
               Daftarkan Putra-Putri Anda
             </Button>
           </Link>
-        </div>
+          </div>
       </div>
     </section>
   );

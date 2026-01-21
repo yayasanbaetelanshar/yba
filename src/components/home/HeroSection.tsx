@@ -40,8 +40,8 @@ const HeroSection = () => {
           {/* Stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 md:gap-8 max-w-4xl mx-auto mb-12 md:mb-16 lg:mb-20">
             {[
-              { number: "4", label: "Lembaga Pendidikan, dan 2 Lembaga Pemberdayaan" },
-              { number: "500+", label: "Santri & Siswa" },
+              { number: "4", label: "Lembaga Pendidikan" },
+              { number: "2", label: "Lembaga Usaha dan Pemberdayaan" },
               { number: "50+", label: "Tenaga Pengajar" },
               { number: "7+", label: "Tahun Berdiri" },
             ].map((stat, index) => (
@@ -85,7 +85,7 @@ const HeroSection = () => {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 sm:bottom-10 md:bottom-12 left-1/2 -translate-x-1/2 animate-bounce">
+      <div className="relative bottom-8 sm:bottom-10 md:bottom-12 left-1/2 -translate-x-1/2 animate-bounce">
         <div className="w-8 h-12 border-2 border-white/40 rounded-full flex items-start justify-center p-2 backdrop-blur-sm">
           <div className="w-1.5 h-3 bg-yellow-400 rounded-full animate-pulse" />
         </div>
